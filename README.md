@@ -1,4 +1,4 @@
-> This project is a work in progress that was put together using AI.
+> This is a work in progress that was put together using Claude Sonnet 4. I was intrigued on the idea of creating web-based storytelling that would not be in a traditional form of just pages and plain text. AI is a nice way to test things with small effort. -Pipe
 
 # Desktop Story - Interactive Fiction Experience
 
@@ -28,14 +28,6 @@ Sarah Chen, a research scientist, begins experiencing disturbing symptoms - lost
 
 The story explores themes of identity, reality, and the question: *What if someone else was living your life?*
 
-## 🚀 Getting Started
-
-1. Clone this repository
-2. Open `desktop_story.html` in a modern web browser
-3. Click on desktop icons to explore Sarah's files
-4. Drag windows around to organize your investigation
-5. Use the web browser to search for clues online
-
 ## 🛠️ Technical Details
 
 - **Pure HTML/CSS/JavaScript** - No frameworks or dependencies
@@ -44,21 +36,9 @@ The story explores themes of identity, reality, and the question: *What if someo
 - **CSS Grid and Flexbox** for layout
 - **Custom SVG icons** for authentic desktop feel
 
-## ⚠️ Content Warning
-
-This story contains themes of psychological manipulation, medical experimentation, and identity confusion that some players may find disturbing.
-
 ## 📱 Compatibility
 
 Works best on desktop browsers. Mobile support is limited due to the desktop interface design.
-
-## 🎯 Target Audience
-
-Perfect for fans of:
-- Interactive fiction and ARGs (Alternate Reality Games)
-- Psychological thrillers
-- Desktop/computer simulation games
-- Mystery and investigation narratives
 
 ---
 
