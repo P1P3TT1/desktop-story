@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desktop - Sarah's Computer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        .desktop {
+            height: 100vh;
+            position: relative;
+            padding: 20px;
+        }
+
+        .desktop-icon {
+            width: 80px;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+
+        .desktop-icon:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        .icon-img {
+            width: 48px;
+            height: 48px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 8px;
+        }
+
+        .icon-text {
+            font-size: 12px;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .folder-icon { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgMTBDNCA4Ljg5NTQzIDQuODk1NDMgOCA2IDhIMTguNTg1OEwyMi41ODU4IDEySDQyQzQzLjEwNDYgMTIgNDQgMTIuODk1NCA0NCAxNFYzNkM0NCAzNy4xMDQ2IDQzLjEwNDYgMzggNDIgMzhINkM0Ljg5NTQzIDM4IDQgMzcuMTA0NiA0IDM2VjEwWiIgZmlsbD0iI0ZGQzEzNiIvPgo8L3N2Zz4K'); }
+        .email-icon { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgMTJDNCA5Ljc5MDg2IDUuNzkwODYgOCA4IDhIMzZDMzguMjA5MSA4IDQwIDkuNzkwODYgNDAgMTJWMzJDNDAgMzQuMjA5MSAzOC4yMDkxIDM2IDM2IDM2SDhDNS43OTA4NiAzNiA0IDM0LjIwOTEgNCAzMlYxMloiIGZpbGw9IiM0Mjg1RjQiLz4KPHBhdGggZD0iTTggMTJMMjQgMjJMMzYgMTJIOFoiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuMyIvPgo8L3N2Zz4K'); }
+        .text-icon { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDZDMTAuODk1NCA2IDEwIDYuODk1NDMgMTAgOFY0MEMxMCA0MS4xMDQ2IDEwLjg5NTQgNDIgMTIgNDJIMzZDMzcuMTA0NiA0MiAzOCA0MS4xMDQ2IDM4IDQwVjhDMzggNi44OTU0MyAzNy4xMDQ2IDYgMzYgNkgxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xNiAxNEgzMk0xNiAxOEgzMk0xNiAyMkgyOE0xNiAyNkgyNE0xNiAzMEgyNCIgc3Ryb2tlPSIjNjY2IiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+'); }
+        .photo-icon { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTYgMTBDNiA4Ljg5NTQzIDYuODk1NDMgOCA4IDhIMzZDMzcuMTA0NiA4IDM4IDguODk1NDMgMzggMTBWMzJDMzggMzMuMTA0NiAzNy4xMDQ2IDM0IDM2IDM0SDhDNi44OTU0MyAzNCA2IDMzLjEwNDYgNiAzMlYxMFoiIGZpbGw9IiNGRjZCNkIiLz4KPGNpcmNsZSBjeD0iMTQiIGN5PSIxNiIgcj0iMyIgZmlsbD0iI0ZGRUYzNyIvPgo8cGF0aCBkPSJNNiAyNkwyMCAyMEwzOCAyOFYzMkg2VjI2WiIgZmlsbD0iIzM0QjQzMyIvPgo8L3N2Zz4K'); }
+        .browser-icon { background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjQiIGN5PSIyNCIgcj0iMjAiIGZpbGw9IiM0Mjg1RjQiLz4KPHBhdGggZD0iTTI0IDhBMTYgMTYgMCAwIDAgOCAyNEExNiAxNiAwIDAgMCAyNCA0MEExNiAxNiAwIDAgMCA0MCAyNEExNiAxNiAwIDAgMCAyNCA4Wk0yNCAzNkMxNC42IDM2IDcuMiAzMC44IDYuNCAyNEg0MS42QzQwLjggMzAuOCAzMy40IDM2IDI0IDM2WiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTI0IDhWNDBNOCAyNEg0ME0xNiAxMkMxOSAxNiAyMSAyMCAyNCAyNEMyNyAyOCAyOSAzMiAzMiAzNk0zMiAxMkMyOSAxNiAyNyAyMCAyNCAyNEMyMSAyOCAzMCAzMiAxNiAzNiIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPgo='); }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            color: white;
+        }
+
+        .start-button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 16px;
+        }
+
+        .start-button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .clock {
+            margin-left: auto;
+            font-size: 14px;
+        }
+
+        .window {
+            position: fixed;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            display: none;
+            overflow: hidden;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .window.active {
+            display: block;
+        }
+
+        .window-header {
+            background: #f0f0f0;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .window-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .window-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .close-btn { background: #ff5f57; }
+        .minimize-btn { background: #ffbd2e; }
+        .maximize-btn { background: #28ca42; }
+
+        .window-content {
+            padding: 20px;
+            height: calc(100% - 60px);
+            overflow-y: auto;
+        }
+
+        .email-list {
+            list-style: none;
+        }
+
+        .email-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .email-item:hover {
+            background: #f5f5f5;
+        }
+
+        .email-sender {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .email-subject {
+            margin: 4px 0;
+            color: #555;
+        }
+
+        .email-preview {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .email-content {
+            display: none;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .email-content.active {
+            display: block;
+        }
+
+        .email-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .email-from {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .email-subject-full {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .email-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .email-body {
+            line-height: 1.6;
+            white-space: pre-line;
+        }
+
+        .back-to-inbox {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .back-to-inbox:hover {
+            background: #3367d6;
+        }
+
+        .document-content {
+            display: none;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .document-content.active {
+            display: block;
+        }
+
+        .document-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+
+        .document-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .document-date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .document-body {
+            line-height: 1.6;
+            white-space: pre-line;
+            font-family: 'Courier New', monospace;
+        }
+
+        .back-to-files {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .back-to-files:hover {
+            background: #3367d6;
+        }
+
+        .classified {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #c62828;
+        }
+
+        .redacted {
+            background: #000;
+            color: #000;
+            user-select: none;
+        }
+
+        .redacted:hover {
+            background: #ffff00;
+            color: #000;
+        }
+
+        .browser-bar {
+            background: #f1f3f4;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #ccc;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .nav-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .address-bar {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background: #3367d6;
+        }
+
+        .browser-content {
+            height: calc(100% - 120px);
+            overflow-y: auto;
+            background: white;
+        }
+
+        .website {
+            display: none;
+            padding: 20px;
+            height: 100%;
+        }
+
+        .website.active {
+            display: block;
+        }
+
+        .search-engine {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .search-logo {
+            font-size: 72px;
+            color: #4285f4;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 500px;
+            max-width: 90%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 24px;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .search-results {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .search-result {
+            margin-bottom: 24px;
+            padding: 16px;
+            border-left: 3px solid #4285f4;
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+
+        .search-result:hover {
+            background: #e8f0fe;
+        }
+
+        .result-title {
+            font-size: 18px;
+            color: #1a0dab;
+            text-decoration: underline;
+            margin-bottom: 4px;
+        }
+
+        .result-url {
+            color: #006621;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .result-snippet {
+            color: #545454;
+            line-height: 1.4;
+        }
+
+        .news-site {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .news-header {
+            background: #1976d2;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .news-article {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .article-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .article-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .article-content {
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .forum-post {
+            background: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+
+        .post-header {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post-user {
+            font-weight: bold;
+            color: #1976d2;
+        }
+
+        .post-date {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .post-content {
+            padding: 16px;
+            line-height: 1.6;
+        }
+
+        .error-page {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 16px;
+        }
+
+        .file-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: #f0f0f0;
+        }
+
+        .draggable {
+            position: absolute;
+            z-index: 1000;
+        }
+
+        .diary-entry {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #fafafa;
+            border-left: 4px solid #4285f4;
+            border-radius: 4px;
+        }
+
+        .diary-date {
+            font-weight: 600;
+            color: #4285f4;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <!-- Desktop Icons -->
+        <div class="desktop-icon" onclick="openWindow('email')" style="position: absolute; top: 20px; left: 20px;">
+            <div class="icon-img email-icon"></div>
+            <div class="icon-text">Email</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openWindow('documents')" style="position: absolute; top: 20px; left: 120px;">
+            <div class="icon-img folder-icon"></div>
+            <div class="icon-text">Documents</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openWindow('diary')" style="position: absolute; top: 20px; left: 220px;">
+            <div class="icon-img text-icon"></div>
+            <div class="icon-text">Personal Diary</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openWindow('photos')" style="position: absolute; top: 20px; left: 320px;">
+            <div class="icon-img photo-icon"></div>
+            <div class="icon-text">Photos</div>
+        </div>
+
+        <div class="desktop-icon" onclick="openWindow('browser')" style="position: absolute; top: 20px; left: 420px;">
+            <div class="icon-img browser-icon"></div>
+            <div class="icon-text">Web Browser</div>
+        </div>
+    </div>
+
+    <!-- Email Window -->
+    <div id="email-window" class="window draggable" style="top: 10%; left: 10%; width: 600px; height: 500px;">
+        <div class="window-header">
+            <div class="window-title">📧 Sarah's Email - Inbox</div>
+            <div class="window-controls">
+                <button class="window-button minimize-btn"></button>
+                <button class="window-button maximize-btn"></button>
+                <button class="window-button close-btn" onclick="closeWindow('email')"></button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div id="email-inbox">
+                <ul class="email-list">
+                    <li class="email-item" onclick="showEmail(1)">
+                        <div class="email-sender">Dr. Martinez</div>
+                        <div class="email-subject">Re: Your test results</div>
+                        <div class="email-preview">Sarah, I need to discuss these results with you...</div>
+                    </li>
+                    <li class="email-item" onclick="showEmail(2)">
+                        <div class="email-sender">Mom</div>
+                        <div class="email-subject">Worried about you</div>
+                        <div class="email-preview">Haven't heard from you in weeks. Please call...</div>
+                    </li>
+                    <li class="email-item" onclick="showEmail(3)">
+                        <div class="email-sender">Unknown Sender</div>
+                        <div class="email-subject">You're not alone</div>
+                        <div class="email-preview">I know what you're going through. Meet me at...</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div id="email-content-1" class="email-content">
+                <button class="back-to-inbox" onclick="backToInbox()">← Back to Inbox</button>
+                <div class="email-header">
+                    <div class="email-from">From: Dr. Martinez &lt;martinez@healthcenter.org&gt;</div>
+                    <div class="email-subject-full">Re: Your test results</div>
+                    <div class="email-date">March 28, 2024 - 3:42 PM</div>
+                </div>
+                <div class="email-body">Sarah,
+
+I've reviewed your test results and there are some concerning anomalies. The blood work shows markers that shouldn't be possible given your medical history.
+
+Your DNA shows inconsistencies - as if samples were taken from two different people. I've run the tests three times with the same results.
+
+I need you to come in immediately. There's something we need to discuss in person. Don't mention this to anyone else until we talk.
+
+Dr. Martinez</div>
+            </div>
+
+            <div id="email-content-2" class="email-content">
+                <button class="back-to-inbox" onclick="backToInbox()">← Back to Inbox</button>
+                <div class="email-header">
+                    <div class="email-from">From: Mom &lt;helen.chen@email.com&gt;</div>
+                    <div class="email-subject-full">Worried about you</div>
+                    <div class="email-date">March 27, 2024 - 8:15 AM</div>
+                </div>
+                <div class="email-body">Sarah,
+
+I haven't heard from you in three weeks. Your sister says you haven't been answering her calls either. 
+
+I drove by your apartment yesterday but all the lights were off. Mrs. Peterson from next door said she's been hearing two voices from your apartment - a woman's voice, but also someone else.
+
+Are you seeing someone? Why haven't you told us? Please call me. I'm worried sick.
+
+Love,
+Mom
+
+P.S. - I found some old photos while cleaning the attic. There are pictures of you as a child that I don't remember taking. We need to talk.</div>
+            </div>
+
+            <div id="email-content-3" class="email-content">
+                <button class="back-to-inbox" onclick="backToInbox()">← Back to Inbox</button>
+                <div class="email-header">
+                    <div class="email-from">From: [ENCRYPTED SENDER]</div>
+                    <div class="email-subject-full">You're not alone</div>
+                    <div class="email-date">March 29, 2024 - 11:58 PM</div>
+                </div>
+                <div class="email-body">Sarah,
+
+I know this must be confusing. The dreams, the lost time, the feeling that someone else is living your life.
+
+You're not going crazy. You're not sick. You're experiencing what I experienced before they found me.
+
+There are others like us. The experiments from the 1980s didn't end - they just got better at hiding them. We are the results of Project Mirror, and now they want us back.
+
+Meet me at the old pier tomorrow at midnight. Come alone. Look for someone wearing a red scarf.
+
+Don't trust Dr. Martinez. Don't trust your family. They may not be who they appear to be.
+
+The woman in your mirror isn't a hallucination.
+
+- A friend who escaped</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documents Window -->
+    <div id="documents-window" class="window draggable" style="top: 15%; left: 15%; width: 500px; height: 400px;">
+        <div class="window-header">
+            <div class="window-title">📁 Documents</div>
+            <div class="window-controls">
+                <button class="window-button minimize-btn"></button>
+                <button class="window-button maximize-btn"></button>
+                <button class="window-button close-btn" onclick="closeWindow('documents')"></button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div id="documents-list">
+                <div class="file-list">
+                    <div class="file-item" onclick="openDocument('research')">
+                        <div class="icon-img text-icon"></div>
+                        <div>Research Notes</div>
+                    </div>
+                    <div class="file-item" onclick="openDocument('letter')">
+                        <div class="icon-img text-icon"></div>
+                        <div>Letter Draft</div>
+                    </div>
+                    <div class="file-item" onclick="openDocument('medical')">
+                        <div class="icon-img text-icon"></div>
+                        <div>Medical Records</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="document-content-research" class="document-content">
+                <button class="back-to-files" onclick="backToFiles()">← Back to Files</button>
+                <div class="document-header">
+                    <div class="document-title">Research Notes - Identity Displacement</div>
+                    <div class="document-date">Last modified: March 22, 2024</div>
+                </div>
+                <div class="document-body">RESEARCH NOTES - IDENTITY DISPLACEMENT PHENOMENA
+Dr. Sarah Chen - Personal Investigation
+
+==================================================
+
+CASE STUDIES: Individuals experiencing memory gaps and identity confusion
+
+DOCUMENTED SYMPTOMS:
+- Lost time periods (ranging from hours to entire days)
+- Unfamiliar belongings appearing in personal spaces
+- Dreams of alternate life scenarios with vivid detail
+- Persistent feeling of being watched or followed
+- Physical evidence of activities not remembered
+- Handwriting samples that don't match subject's normal style
+
+SIMILAR CASES FOUND:
+Subject A (1987): Female, age 28, biochemist
+- Reported "sharing" apartment with unknown person
+- Found diary entries in her handwriting discussing events she never experienced
+- Last seen entering laboratory after hours
+
+Subject B (1991): Male, age 34, teacher  
+- Students reported dramatic personality changes
+- Security footage showed him having conversations with himself
+- Files corrupted - investigation abandoned
+
+Subject C (1995): Female, age 31, journalist
+- Investigating government experiments when symptoms began
+- Found her own articles published under different name
+- Case closed - officially ruled suicide
+
+POSSIBLE CAUSES:
+- Environmental factors? [RESEARCH INCOMPLETE]
+- Psychological manipulation? [NEED MORE DATA] 
+- Government experiments? [FILE CORRUPTED - CANNOT RECOVER]
+
+PERSONAL NOTE: I'm not crazy. The evidence is mounting. Someone is living my life when I'm not conscious. The handwriting in my calendar matches mine perfectly, but I don't remember making those appointments.
+
+Next steps: Examine the mirror. Something is wrong with the reflection.</div>
+            </div>
+
+            <div id="document-content-letter" class="document-content">
+                <button class="back-to-files" onclick="backToFiles()">← Back to Files</button>
+                <div class="document-header">
+                    <div class="document-title">Letter Draft - URGENT WARNING</div>
+                    <div class="document-date">Last modified: March 26, 2024</div>
+                </div>
+                <div class="document-body">Dear Sarah,
+
+If you're reading this, then something has happened to me. Or maybe I should say "the other me" because I'm not entirely sure which version of myself is writing this.
+
+The experiments weren't supposed to go this far. We thought we could control it, contain it to the laboratory. Dr. Reeves assured us the quantum consciousness transfer was temporary - just a few minutes of displaced awareness.
+
+We were wrong.
+
+The boundaries between identities are breaking down. What started as brief glimpses into alternate versions of ourselves has become something far more dangerous. We're not just observing other timelines - we're merging with them.
+
+I've been tracking the pattern:
+- Night 1: Dreams of another life
+- Night 7: Physical evidence of the "other" self 
+- Night 14: Lost time begins
+- Night 21: Complete displacement episodes
+- Night 28: [I pray I don't reach this stage]
+
+The mirror in your bedroom - DESTROY IT. Don't look into it after midnight. That's when the barrier is thinnest. The reflection isn't always yours.
+
+Trust no one from the project. Dr. Martinez is not who you think he is. Neither is your mother - check the photographs. Look at her eyes in the old pictures versus the recent ones.
+
+The woman who shares your apartment is you, but from a timeline where the experiments succeeded. She's trying to take your place permanently.
+
+There's a failsafe hidden in the lab - Room B-7, behind the mirror. But be careful. Others are watching.
+
+If you can't find this letter, if someone else is reading it, then it may already be too late for both of us.
+
+[UNSIGNED - TRUST NO ONE]</div>
+            </div>
+
+            <div id="document-content-medical" class="document-content">
+                <button class="back-to-files" onclick="backToFiles()">← Back to Files</button>
+                <div class="document-header">
+                    <div class="document-title">Medical Records - CLASSIFIED</div>
+                    <div class="document-date">Confidential Document</div>
+                </div>
+                <div class="classified">⚠️ CLASSIFIED DOCUMENT - UNAUTHORIZED ACCESS PROHIBITED ⚠️</div>
+                <div class="document-body">PATIENT: Sarah Chen
+DOB: [REDACTED]
+PROJECT: Mirror - Phase 3
+CLASSIFICATION LEVEL: BLACK SITE
+
+==================================================
+
+CONDITION: Quantum Consciousness Displacement (QCD)
+STAGE: 4 of 5 - CRITICAL
+
+SYMPTOMS OBSERVED:
+✓ Temporal displacement episodes
+✓ Memory fragmentation and reconstruction  
+✓ Parallel identity manifestation
+✓ Physical reality distortion
+⚠ Approaching complete timeline convergence
+
+TREATMENT PROTOCOL:
+Subject shows signs of advanced QCD following exposure to quantum mirror array. Consciousness is splitting between multiple timeline variants, creating dangerous instability.
+
+RECOMMENDATION: Immediate isolation and containment required.
+
+NOTES: 
+- Subject may not be aware of alternate timeline presence
+- Exercise EXTREME caution - displaced consciousness may be hostile
+- Other variants showing increased activity
+- <span class="redacted">Dr. Martinez compromised - remove from case</span>
+- <span class="redacted">Family members may be alternates - verify identity</span>
+
+OBSERVATION LOG:
+Day 1: Subject reports "strange dreams"
+Day 7: Physical evidence of alternate presence in apartment
+Day 14: First displacement episode - 3 hours missing time
+Day 21: Violent episode - subject claims "someone else" attacked her
+Day 28: [CURRENT] - Multiple variants detected in same location
+
+⚠️ WARNING: DO NOT ALLOW SUBJECT TO DISCOVER PROJECT MIRROR
+⚠️ WARNING: ELIMINATE WITNESSES IF NECESSARY
+⚠️ WARNING: STAGE 5 CONVERGENCE IMMINENT
+
+Authorized Personnel Only:
+Dr. <span class="redacted">CLASSIFIED</span>
+Project Director, Mirror Initiative</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diary Window -->
+    <div id="diary-window" class="window draggable" style="top: 20%; left: 20%; width: 600px; height: 450px;">
+        <div class="window-header">
+            <div class="window-title">📔 Personal Diary</div>
+            <div class="window-controls">
+                <button class="window-button minimize-btn"></button>
+                <button class="window-button maximize-btn"></button>
+                <button class="window-button close-btn" onclick="closeWindow('diary')"></button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="diary-entry">
+                <div class="diary-date">March 15, 2024</div>
+                <div>The dreams are getting worse. I keep seeing the same face in the mirror, but it's not mine. Dr. Martinez says it's just stress, but I know there's something more...</div>
+            </div>
+            <div class="diary-entry">
+                <div class="diary-date">March 20, 2024</div>
+                <div>Found a photograph in my apartment that I don't remember taking. It shows a woman who looks exactly like me, but she's wearing clothes I've never owned. How is this possible?</div>
+            </div>
+            <div class="diary-entry">
+                <div class="diary-date">March 25, 2024</div>
+                <div>Someone has been in my apartment. Things are moved, rearranged. The photo is gone. I'm scared to sleep.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Photos Window -->
+    <div id="photos-window" class="window draggable" style="top: 25%; left: 25%; width: 500px; height: 400px;">
+        <div class="window-header">
+            <div class="window-title">🖼️ Photos</div>
+            <div class="window-controls">
+                <button class="window-button minimize-btn"></button>
+                <button class="window-button maximize-btn"></button>
+                <button class="window-button close-btn" onclick="closeWindow('photos')"></button>
+            </div>
+        </div>
+        <div class="window-content">
+            <div style="text-align: center; color: #666; margin-top: 50px;">
+                <p>📷</p>
+                <p>Most photos have been deleted...</p>
+                <p style="margin-top: 20px; cursor: pointer; color: #4285f4;" onclick="alert('You find a hidden folder labeled: DO NOT OPEN')">🗂️ Hidden Folder</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Browser Window -->
+    <div id="browser-window" class="window draggable" style="top: 8%; left: 8%; width: 800px; height: 600px;">
+        <div class="window-header">
+            <div class="window-title">🌐 Web Browser</div>
+            <div class="window-controls">
+                <button class="window-button minimize-btn"></button>
+                <button class="window-button maximize-btn"></button>
+                <button class="window-button close-btn" onclick="closeWindow('browser')"></button>
+            </div>
+        </div>
+        <div class="browser-bar">
+            <div class="nav-buttons">
+                <button class="nav-btn" id="back-btn" onclick="browserBack()" disabled>←</button>
+                <button class="nav-btn" id="forward-btn" onclick="browserForward()" disabled>→</button>
+                <button class="nav-btn" onclick="browserRefresh()">⟳</button>
+            </div>
+            <input type="text" class="address-bar" id="address-bar" placeholder="Search or enter website URL" 
+                   onkeypress="if(event.key==='Enter') browserSearch()" value="search.com">
+            <button class="search-btn" onclick="browserSearch()">Go</button>
+        </div>
+        <div class="browser-content" id="browser-content">
+            <!-- Search Engine Page -->
+            <div id="page-search" class="website active">
+                <div class="search-engine">
+                    <div class="search-logo">SearchEngine</div>
+                    <input type="text" class="search-box" id="main-search" placeholder="Search the web..." 
+                           onkeypress="if(event.key==='Enter') performSearch()">
+                </div>
+            </div>
+
+            <!-- Search Results Page -->
+            <div id="page-search-results" class="website">
+                <div class="search-engine">
+                    <div class="search-logo" style="font-size: 36px; margin-bottom: 20px;">SearchEngine</div>
+                    <div class="search-results" id="search-results-container"></div>
+                </div>
+            </div>
+
+            <!-- News Site -->
+            <div id="page-news" class="website">
+                <div class="news-site">
+                    <div class="news-header">
+                        <h1>Daily Herald - Breaking News</h1>
+                    </div>
+                    <div class="news-article">
+                        <div class="article-title">Local Research Facility Under Investigation</div>
+                        <div class="article-meta">March 29, 2024 | By Jennifer Walsh</div>
+                        <div class="article-content">
+                            Federal authorities have launched an investigation into the Meridian Research Center following reports of unauthorized human experimentation. Multiple sources claim the facility has been conducting classified projects since the 1980s.
+                            <br><br>
+                            "We received credible reports of missing persons and unethical medical procedures," said FBI spokesperson Maria Rodriguez. The facility's director, Dr. Helena Reeves, was unavailable for comment.
+                            <br><br>
+                            Local residents report strange occurrences near the facility, including unexplained lights and individuals behaving erratically after visiting the center.
+                        </div>
+                    </div>
+                    <div class="news-article">
+                        <div class="article-title">Woman Reports Identity Theft of Unprecedented Nature</div>
+                        <div class="article-meta">March 28, 2024 | By David Chen</div>
+                        <div class="article-content">
+                            Police are investigating a bizarre case where a local woman claims someone is "living her life" while she sleeps. The unidentified woman provided evidence of activities she doesn't remember, including appointments, purchases, and even job applications submitted in her name.
+                            <br><br>
+                            "This goes beyond typical identity theft," said Detective Sarah Morrison. "The perpetrator seems to have intimate knowledge of the victim's life, habits, and even handwriting."
+                            <br><br>
+                            The case has drawn attention from federal investigators who believe it may be connected to other similar reports nationwide.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forum Page -->
+            <div id="page-forum" class="website">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="background: #2c3e50; color: white; padding: 16px; text-align: center; margin-bottom: 20px;">
+                        <h2>MirrorTruth Forum - Exposing Project Mirror</h2>
+                        <small>A safe space for survivors and truth seekers</small>
+                    </div>
+                    
+                    <div class="forum-post">
+                        <div class="post-header">
+                            <div class="post-user">TruthSeeker_91</div>
+                            <div class="post-date">March 27, 2024 - 11:43 PM</div>
+                        </div>
+                        <div class="post-content">
+                            They got to my sister last week. She came home from her "doctor's appointment" and something was different. She looked the same, sounded the same, but her eyes... there was someone else looking back at me.
+                            <br><br>
+                            The real Sarah would never drink coffee. This one makes it every morning. The real Sarah was left-handed. This one signs with her right hand.
+                            <br><br>
+                            If you're reading this and experiencing similar things, DON'T trust your medical records. They're all part of it.
+                        </div>
+                    </div>
+
+                    <div class="forum-post">
+                        <div class="post-header">
+                            <div class="post-user">EscapedSubject_X</div>
+                            <div class="post-date">March 28, 2024 - 2:15 AM</div>
+                        </div>
+                        <div class="post-content">
+                            @TruthSeeker_91 - Sarah Chen? If so, I've been trying to reach her. I'm the one who sent the email about the pier.
+                            <br><br>
+                            The project is accelerating. They're not just swapping people anymore - they're merging timelines. Your sister might still be in there, sharing the same body.
+                            <br><br>
+                            Check the mirror at 3:33 AM. If you see two reflections, it's not too late.
+                        </div>
+                    </div>
+
+                    <div class="forum-post">
+                        <div class="post-header">
+                            <div class="post-user">Dr_Reeves_Whistleblower</div>
+                            <div class="post-date">March 29, 2024 - 12:01 AM</div>
+                        </div>
+                        <div class="post-content">
+                            ATTENTION: I worked at Meridian Research. Project Mirror is real. They're using quantum consciousness displacement to swap people between parallel timelines.
+                            <br><br>
+                            Stage 5 subjects lose their original identity permanently. Sarah Chen is currently Stage 4. She has maybe 48 hours before complete convergence.
+                            <br><br>
+                            The failsafe is in Lab B-7. But be warned - they know about this forum. They're watching.
+                            <br><br>
+                            [USER WAS BANNED FOR THIS POST]
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Government Site -->
+            <div id="page-government" class="website">
+                <div class="error-page">
+                    <div class="error-code">403</div>
+                    <h2>Access Denied</h2>
+                    <p>You do not have permission to access this resource.</p>
+                    <p style="margin-top: 30px; color: #999; font-size: 12px;">
+                        This site is monitored. Your access attempt has been logged.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <button class="start-button">Start</button>
+        <div class="clock" id="clock"></div>
+    </div>
+
+    <script>
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Window management
+        function openWindow(windowId) {
+            const window = document.getElementById(windowId + '-window');
+            window.classList.add('active');
+        }
+
+        function closeWindow(windowId) {
+            const window = document.getElementById(windowId + '-window');
+            window.classList.remove('active');
+        }
+
+        // Email functionality
+        function showEmail(emailId) {
+            // Hide inbox
+            document.getElementById('email-inbox').style.display = 'none';
+            
+            // Hide all email contents
+            const allEmails = document.querySelectorAll('.email-content');
+            allEmails.forEach(email => email.classList.remove('active'));
+            
+            // Show selected email
+            const selectedEmail = document.getElementById('email-content-' + emailId);
+            if (selectedEmail) {
+                selectedEmail.classList.add('active');
+            }
+        }
+
+        function backToInbox() {
+            // Hide all email contents
+            const allEmails = document.querySelectorAll('.email-content');
+            allEmails.forEach(email => email.classList.remove('active'));
+            
+            // Show inbox
+            document.getElementById('email-inbox').style.display = 'block';
+        }
+
+        // Document functionality
+        function openDocument(docId) {
+            // Hide file list
+            document.getElementById('documents-list').style.display = 'none';
+            
+            // Hide all document contents
+            const allDocuments = document.querySelectorAll('.document-content');
+            allDocuments.forEach(doc => doc.classList.remove('active'));
+            
+            // Show selected document
+            const selectedDocument = document.getElementById('document-content-' + docId);
+            if (selectedDocument) {
+                selectedDocument.classList.add('active');
+            }
+        }
+
+        function backToFiles() {
+            // Hide all document contents
+            const allDocuments = document.querySelectorAll('.document-content');
+            allDocuments.forEach(doc => doc.classList.remove('active'));
+            
+            // Show file list
+            document.getElementById('documents-list').style.display = 'block';
+        }
+
+        // Make windows draggable
+        let dragItem = null;
+        let dragOffset = {x: 0, y: 0};
+
+        document.addEventListener('mousedown', function(e) {
+            if (e.target.closest('.window-header')) {
+                dragItem = e.target.closest('.window');
+                const rect = dragItem.getBoundingClientRect();
+                dragOffset.x = e.clientX - rect.left;
+                dragOffset.y = e.clientY - rect.top;
+            }
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (dragItem) {
+                dragItem.style.left = (e.clientX - dragOffset.x) + 'px';
+                dragItem.style.top = (e.clientY - dragOffset.y) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            dragItem = null;
+        });
+
+        // Browser functionality
+        let browserHistory = ['search.com'];
+        let historyIndex = 0;
+
+        function browserSearch() {
+            const query = document.getElementById('address-bar').value.toLowerCase();
+            navigateToPage(query);
+        }
+
+        function performSearch() {
+            const query = document.getElementById('main-search').value.toLowerCase();
+            if (query.trim()) {
+                showSearchResults(query);
+            }
+        }
+
+        function navigateToPage(url) {
+            // Hide all pages
+            document.querySelectorAll('.website').forEach(page => page.classList.remove('active'));
+            
+            let targetPage = 'page-search';
+            let newUrl = url;
+
+            if (url.includes('project mirror') || url.includes('meridian research') || url.includes('identity displacement')) {
+                targetPage = 'page-forum';
+                newUrl = 'mirrortruth.forum';
+            } else if (url.includes('news') || url.includes('herald') || url.includes('research facility')) {
+                targetPage = 'page-news';
+                newUrl = 'dailyherald.com/news';
+            } else if (url.includes('government') || url.includes('.gov') || url.includes('classified')) {
+                targetPage = 'page-government';
+                newUrl = 'government.classified';
+            } else if (url.includes('sarah chen') || url.includes('missing person')) {
+                showSearchResults('sarah chen missing');
+                return;
+            }
+
+            // Show target page
+            document.getElementById(targetPage).classList.add('active');
+            document.getElementById('address-bar').value = newUrl;
+
+            // Update history
+            if (historyIndex < browserHistory.length - 1) {
+                browserHistory = browserHistory.slice(0, historyIndex + 1);
+            }
+            browserHistory.push(newUrl);
+            historyIndex = browserHistory.length - 1;
+            updateNavButtons();
+        }
+
+        function showSearchResults(query) {
+            const resultsContainer = document.getElementById('search-results-container');
+            let results = '';
+
+            if (query.includes('sarah chen') || query.includes('missing') || query.includes('identity')) {
+                results = `
+                    <div class="search-result" onclick="navigateToPage('news')">
+                        <div class="result-title">Woman Reports Identity Theft of Unprecedented Nature</div>
+                        <div class="result-url">dailyherald.com/local/identity-theft-case</div>
+                        <div class="result-snippet">Police are investigating a bizarre case where a local woman claims someone is "living her life" while she sleeps...</div>
+                    </div>
+                    <div class="search-result" onclick="navigateToPage('forum')">
+                        <div class="result-title">MirrorTruth Forum - Sarah Chen Support Thread</div>
+                        <div class="result-url">mirrortruth.forum/users/sarah-chen</div>
+                        <div class="result-snippet">Support forum for those experiencing similar phenomena. Recent posts about Sarah Chen case...</div>
+                    </div>
+                `;
+            } else if (query.includes('project mirror') || query.includes('meridian') || query.includes('experiments')) {
+                results = `
+                    <div class="search-result" onclick="navigateToPage('news')">
+                        <div class="result-title">Local Research Facility Under Investigation</div>
+                        <div class="result-url">dailyherald.com/breaking/meridian-investigation</div>
+                        <div class="result-snippet">Federal authorities have launched an investigation into the Meridian Research Center following reports of unauthorized human experimentation...</div>
+                    </div>
+                    <div class="search-result" onclick="navigateToPage('forum')">
+                        <div class="result-title">Project Mirror Survivors Forum</div>
+                        <div class="result-url">mirrortruth.forum</div>
+                        <div class="result-snippet">A safe space for survivors and truth seekers. Exposing the truth about Project Mirror...</div>
+                    </div>
+                    <div class="search-result" onclick="navigateToPage('government')">
+                        <div class="result-title">Meridian Research Center - Official Records</div>
+                        <div class="result-url">records.gov/facilities/meridian</div>
+                        <div class="result-snippet">Access Denied - Classification Level: BLACK SITE</div>
+                    </div>
+                `;
+            } else {
+                results = `
+                    <div class="search-result">
+                        <div class="result-title">No relevant results found</div>
+                        <div class="result-url">search-engine.com</div>
+                        <div class="result-snippet">Try searching for: "project mirror", "sarah chen", "meridian research", or "identity displacement"</div>
+                    </div>
+                `;
+            }
+
+            resultsContainer.innerHTML = results;
+            document.querySelectorAll('.website').forEach(page => page.classList.remove('active'));
+            document.getElementById('page-search-results').classList.add('active');
+            document.getElementById('address-bar').value = `search.com/results?q=${query}`;
+        }
+
+        function browserBack() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                const url = browserHistory[historyIndex];
+                document.getElementById('address-bar').value = url;
+                navigateToPageDirect(url);
+                updateNavButtons();
+            }
+        }
+
+        function browserForward() {
+            if (historyIndex < browserHistory.length - 1) {
+                historyIndex++;
+                const url = browserHistory[historyIndex];
+                document.getElementById('address-bar').value = url;
+                navigateToPageDirect(url);
+                updateNavButtons();
+            }
+        }
+
+        function navigateToPageDirect(url) {
+            document.querySelectorAll('.website').forEach(page => page.classList.remove('active'));
+            
+            if (url.includes('mirrortruth')) {
+                document.getElementById('page-forum').classList.add('active');
+            } else if (url.includes('dailyherald')) {
+                document.getElementById('page-news').classList.add('active');
+            } else if (url.includes('government') || url.includes('classified')) {
+                document.getElementById('page-government').classList.add('active');
+            } else if (url.includes('results')) {
+                document.getElementById('page-search-results').classList.add('active');
+            } else {
+                document.getElementById('page-search').classList.add('active');
+            }
+        }
+
+        function browserRefresh() {
+            // Just re-navigate to current page
+            navigateToPageDirect(document.getElementById('address-bar').value);
+        }
+
+        function updateNavButtons() {
+            document.getElementById('back-btn').disabled = (historyIndex <= 0);
+            document.getElementById('forward-btn').disabled = (historyIndex >= browserHistory.length - 1);
+        }
+    </script>
+</body>
+</html>
