@@ -1,0 +1,15 @@
+{
+  "title": "Desktop - Sarah's Computer",
+  "clockStart": "2024-03-30T00:40",
+  "apps": {
+    "email": { "label": "Email", "title": "📧 Sarah's Email - Inbox" },
+    "documents": { "label": "Documents", "title": "📁 Documents" },
+    "diary": { "label": "Personal Diary", "title": "📔 Personal Diary" },
+    "photos": { "label": "Photos", "title": "🖼️ Photos", "emptyText": "Most photos have been deleted..." },
+    "browser": { "label": "Web Browser", "title": "🌐 Web Browser", "homeUrl": "search.com" }
+  },
+  "search": {
+    "engineName": "SearchEngine",
+    "noResultsHint": "Try searching for: \"project mirror\", \"sarah chen\", \"meridian research\", or \"identity displacement\""
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "files": {
+    "diary": [
+      "2024-03-15.md",
+      "2024-03-20.md",
+      "2024-03-25.md"
+    ],
+    "documents": [
+      "01-research-notes.md",
+      "02-letter-draft.md",
+      "03-medical-records.md"
+    ],
+    "emails": [
+      "01-dr-martinez.md",
+      "02-mom.md",
+      "03-unknown-sender.md"
+    ],
+    "photos": [
+      "01-hidden-folder.md"
+    ],
+    "web/search": [
+      "01-identity-theft-case.md",
+      "02-sarah-chen-thread.md",
+      "03-meridian-investigation.md",
+      "04-survivors-forum.md",
+      "05-meridian-records.md"
+    ],
+    "web/sites": [
+      "01-daily-herald.md",
+      "02-mirrortruth-forum.md",
+      "03-records-gov.md"
+    ]
+  }
+}
