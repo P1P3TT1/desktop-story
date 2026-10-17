@@ -3,8 +3,9 @@
 // Refresh work the same for sites, search results and error pages.
 
 import { asList, escapeHtml, renderText } from './content.js';
+import { renderLock } from './lock.js';
 
-export function mountBrowser(body, { sites, results, story }) {
+export function mountBrowser(body, { sites, results, story, progress }) {
   const home = normalize(story.apps?.browser?.homeUrl ?? 'search.com');
   const engineName = story.search?.engineName ?? 'SearchEngine';
   const noResultsHint = story.search?.noResultsHint ?? '';
@@ -47,7 +48,12 @@ export function mountBrowser(body, { sites, results, story }) {
 
   function navigate(input, { push = true } = {}) {
     const route = resolve(input);
-    content.innerHTML = renderRoute(route);
+    if (route.kind === 'site' && progress.isLocked(route.site)) {
+      renderLock(content, route.site, progress, () => navigate(route.url, { push: false }));
+    } else {
+      content.innerHTML = renderRoute(route);
+      if (route.kind === 'site') progress.markSeen(route.site.id);
+    }
     content.scrollTop = 0;
     address.value = route.url;
 
@@ -85,11 +91,13 @@ export function mountBrowser(body, { sites, results, story }) {
   }
 
   // Exact address or alias first, then any page on the same domain. "*.gov" matches every .gov domain.
+  // Sites with "requires" don't exist until the reader has unlocked them.
   function findSite(addr) {
+    const available = sites.filter(progress.isAvailable);
     const patterns = site => [site.url, ...asList(site.aliases)].map(normalize).filter(Boolean);
     const host = hostOf(addr);
-    return sites.find(site => patterns(site).some(p => p === addr || (p.startsWith('*.') && host.endsWith(p.slice(1)))))
-      ?? sites.find(site => patterns(site).some(p => hostOf(p) === host));
+    return available.find(site => patterns(site).some(p => p === addr || (p.startsWith('*.') && host.endsWith(p.slice(1)))))
+      ?? available.find(site => patterns(site).some(p => hostOf(p) === host));
   }
 
   function renderRoute(route) {
@@ -124,7 +132,9 @@ export function mountBrowser(body, { sites, results, story }) {
 
   function searchResults(query) {
     const q = query.toLowerCase();
-    const matches = q ? results.filter(r => asList(r.keywords).some(k => q.includes(String(k).toLowerCase()))) : [];
+    const matches = q
+      ? results.filter(r => progress.isAvailable(r) && asList(r.keywords).some(k => q.includes(String(k).toLowerCase())))
+      : [];
     if (!matches.length) {
       return `
         <div class="search-result">

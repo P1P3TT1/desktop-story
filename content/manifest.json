@@ -13,22 +13,36 @@
     "emails": [
       "01-dr-martinez.md",
       "02-mom.md",
-      "03-unknown-sender.md"
+      "03-unknown-sender.md",
+      "04-mom-the-photos.md",
+      "05-dont-go.md",
+      "06-last-chance.md"
+    ],
+    "endings": [
+      "01-the-pier.md",
+      "02-the-mirror.md"
     ],
     "photos": [
       "01-hidden-folder.md"
+    ],
+    "photos/hidden": [
+      "01-lab-1987.md",
+      "02-two-girls.md",
+      "03-mirror.md"
     ],
     "web/search": [
       "01-identity-theft-case.md",
       "02-sarah-chen-thread.md",
       "03-meridian-investigation.md",
       "04-survivors-forum.md",
-      "05-meridian-records.md"
+      "05-meridian-records.md",
+      "06-children-study.md"
     ],
     "web/sites": [
       "01-daily-herald.md",
       "02-mirrortruth-forum.md",
-      "03-records-gov.md"
+      "03-records-gov.md",
+      "04-herald-archive-1987.md"
     ]
   }
 }

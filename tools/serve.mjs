@@ -11,6 +11,19 @@ import { buildManifest } from './build-manifest.mjs';
 
 const siteRoot = normalize(join(dirname(fileURLToPath(import.meta.url)), '..'));
 const port = Number(process.env.PORT) || 8000;
+let lastWarnings = '';
+
+// Rebuilds the manifest and prints story problems, but only when they change (not on every refresh).
+async function rebuild() {
+  const { warnings } = await buildManifest();
+  const text = warnings.join('\n');
+  if (text !== lastWarnings) {
+    console.warn(warnings.length
+      ? `\n${warnings.length} problem(s) in the story:\n${warnings.map(w => `  - ${w}`).join('\n')}`
+      : '\nNo problems found in the story.');
+    lastWarnings = text;
+  }
+}
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -42,7 +55,7 @@ createServer(async (req, res) => {
   }
 
   try {
-    if (path === '/content/manifest.json') await buildManifest();
+    if (path === '/content/manifest.json') await rebuild();
     const data = await readFile(file);
     res.writeHead(200, {
       'Content-Type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream',

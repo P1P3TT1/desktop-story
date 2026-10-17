@@ -1,0 +1,10 @@
+{
+  "name": "desktop-story",
+  "private": true,
+  "description": "Interactive fiction told through a simulated desktop computer.",
+  "type": "module",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "build": "node tools/build-manifest.mjs --strict"
+  }
+}
