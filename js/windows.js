@@ -13,7 +13,7 @@ export function initWindows(taskbarElement) {
   window.addEventListener('resize', () => windows.forEach(({ el }) => keepInView(el)));
 }
 
-export function createWindow(id, { title, width, height, left, top, bodyClass, onClose }) {
+export function createWindow(id, { title, width, height, left, top, bodyClass, onOpen, onClose }) {
   const el = document.createElement('section');
   el.className = 'window';
   el.id = `${id}-window`;
@@ -40,7 +40,7 @@ export function createWindow(id, { title, width, height, left, top, bodyClass, o
   taskButton.hidden = true;
   taskbarList.append(taskButton);
 
-  windows.set(id, { el, taskButton, onClose });
+  windows.set(id, { el, taskButton, onOpen, onClose });
 
   el.addEventListener('pointerdown', () => focusWindow(id));
   el.querySelector('.minimize-btn').addEventListener('click', () => minimizeWindow(id));
@@ -64,13 +64,21 @@ export function createWindow(id, { title, width, height, left, top, bodyClass, o
 }
 
 export function openWindow(id) {
-  const { el, taskButton } = windows.get(id);
+  const { el, taskButton, onOpen } = windows.get(id);
   el.classList.add('open');
   el.classList.remove('minimized');
   taskButton.hidden = false;
   focusWindow(id);
   keepInView(el);
   el.focus({ preventScroll: true });
+  onOpen?.();
+}
+
+// A small counter (e.g. unread emails) on the window's taskbar button. 0 hides it.
+export function setBadge(id, count) {
+  const { taskButton } = windows.get(id);
+  if (count > 0) taskButton.dataset.badge = count;
+  else delete taskButton.dataset.badge;
 }
 
 export function closeWindow(id) {

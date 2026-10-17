@@ -33,9 +33,12 @@ async function fetchJson(path) {
   }
 }
 
+// Every entry gets an id like "emails/02-mom": its folder plus its file name without ".md".
+// That id is what "requires" fields refer to.
 async function loadEntry(folder, file) {
   const { data, body } = parseFrontMatter(await fetchText(`${folder}/${encodeURIComponent(file)}`));
-  return { ...data, id: file.replace(/\.md$/, ''), folder, file, body };
+  const slug = file.replace(/\.md$/, '');
+  return { ...data, id: `${folder}/${slug}`, slug, folder, file, body };
 }
 
 // Front matter: one "key: value" per line. Values may be "quoted", true/false, numbers or [a, b] lists.
@@ -67,6 +70,28 @@ function parseValue(raw) {
 export function asList(value) {
   if (Array.isArray(value)) return value;
   return value == null || value === '' ? [] : [value];
+}
+
+// "emails/06-last-chance:pier" → { id: "emails/06-last-chance", choice: "pier" }
+export function parseRequirement(requirement) {
+  const [id, choice] = String(requirement).split(':').map(part => part.trim());
+  return { id, choice: choice || null };
+}
+
+// "pier: I'll be there" → { value: "pier", label: "I'll be there" }
+export function parseChoices(value) {
+  return asList(value).map(item => {
+    const text = String(item);
+    const colon = text.indexOf(':');
+    return colon === -1
+      ? { value: normalizeAnswer(text), label: text }
+      : { value: text.slice(0, colon).trim(), label: text.slice(colon + 1).trim() };
+  });
+}
+
+// Passwords ignore case, spaces and punctuation: "Room B-7" and "roomb7" match.
+export function normalizeAnswer(value) {
+  return String(value ?? '').toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 }
 
 export function escapeHtml(value) {
