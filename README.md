@@ -1,4 +1,4 @@
-> This is a work in progress that was put together using Claude Sonnet 4. I was intrigued on the idea of creating web-based storytelling that would not be in a traditional form of just pages and plain text. AI is a nice way to test things with small effort. -Pipe
+> This is a work in progress that was first put together using Claude Sonnet 4 and over year later continued with Opus 5.5. I was intrigued on the idea of creating web-based storytelling that would not be in a traditional form of just pages and plain text. AI is a nice way to test things with small effort. -Pipe
 
 # Desktop Story - Interactive Fiction Experience
 
